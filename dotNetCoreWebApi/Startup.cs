@@ -10,6 +10,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using dotNetCoreWebApi.Data;
+using dotNetCoreWebApi.Repository;
+using Microsoft.EntityFrameworkCore;
 
 namespace dotNetCoreWebApi
 {
@@ -26,6 +29,11 @@ namespace dotNetCoreWebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddDbContext<DataContext>(option =>
+                option.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddCors();
+
+            services.AddScoped<IAuthRepository, AuthRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -37,6 +45,8 @@ namespace dotNetCoreWebApi
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             app.UseRouting();
 
