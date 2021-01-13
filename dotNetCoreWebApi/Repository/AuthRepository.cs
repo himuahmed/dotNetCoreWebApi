@@ -68,7 +68,6 @@ namespace dotNetCoreWebApi.Repository
                 passwordSalt = hmac.Key;
                 passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
             }
-            throw new NotImplementedException();
         }
 
         private bool VerifyPasswordHash(string password, byte[] userPasswordHash, byte[] userPasswordSalt)

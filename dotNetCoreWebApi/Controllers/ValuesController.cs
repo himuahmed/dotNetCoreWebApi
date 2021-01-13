@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace dotNetCoreWebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]")] 
     [ApiController]
     public class ValuesController : ControllerBase
     {
