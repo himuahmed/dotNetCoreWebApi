@@ -4,11 +4,13 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using dotNetCoreWebApi.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace dotNetCoreWebApi.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")] 
     [ApiController]
     public class ValuesController : ControllerBase
@@ -25,6 +27,7 @@ namespace dotNetCoreWebApi.Controllers
             return Ok(values);
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetValue(int id)
         {

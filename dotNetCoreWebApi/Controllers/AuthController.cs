@@ -55,6 +55,7 @@ namespace dotNetCoreWebApi.Controllers
         public async Task<IActionResult> Login(UserLoginDto userLoginDto)
         {
             var loggedInUser = await _authRepository.Login(userLoginDto.Username.ToLower(), userLoginDto.Password);
+
             if (loggedInUser == null)
             {
                 return Unauthorized();
@@ -68,13 +69,13 @@ namespace dotNetCoreWebApi.Controllers
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
 
-            var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            var credential = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
             var tokenDescriptor = new SecurityTokenDescriptor()
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddHours(12),
-                SigningCredentials = cred
+                SigningCredentials = credential,
+                Expires = DateTime.Now.AddHours(12)
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();
