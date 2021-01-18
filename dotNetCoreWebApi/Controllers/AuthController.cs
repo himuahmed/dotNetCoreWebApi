@@ -54,7 +54,7 @@ namespace dotNetCoreWebApi.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserLoginDto userLoginDto)
         {
-            throw new Exception("Error logging in");
+            
 
             var loggedInUser = await _authRepository.Login(userLoginDto.Username.ToLower(), userLoginDto.Password);
 
