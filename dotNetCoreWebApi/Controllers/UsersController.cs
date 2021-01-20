@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -37,6 +39,27 @@ namespace dotNetCoreWebApi.Controllers
 
             var returnedUser = _mapper.Map<UserForDetails>(user);
             return Ok(returnedUser);   
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUser(int id, UserUpdate userUpdate)
+        {
+            if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+            {
+                return Unauthorized();
+            }
+
+            var fetchedUser =await _datingRepository.GetUser(id);
+
+            _mapper.Map(userUpdate, fetchedUser);
+
+            if (await _datingRepository.SaveAll())
+            {
+                return NoContent();
+            }
+
+            throw new Exception("Failed to update user");
+
         }
     }
 }

@@ -23,6 +23,8 @@ namespace dotNetCoreWebApi.Helpers
 
             CreateMap<Photo, PhotoDetails>();
 
+            CreateMap<UserUpdate, User>();
+
         }
     }
 }
