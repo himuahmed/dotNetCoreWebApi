@@ -16,7 +16,7 @@ namespace dotNetCoreWebApi.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IDatingRepository _datingRepository;
-        private IMapper _mapper;
+        private readonly IMapper _mapper;
 
         public UsersController(IDatingRepository datingRepository,IMapper mapper)
         {
@@ -32,7 +32,7 @@ namespace dotNetCoreWebApi.Controllers
             return Ok(returnedUsers);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}",Name = "GetUser")]
         public async Task<IActionResult> GetUser(int id)
         {
             var user =await _datingRepository.GetUser(id);

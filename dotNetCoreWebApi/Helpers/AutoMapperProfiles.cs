@@ -22,8 +22,8 @@ namespace dotNetCoreWebApi.Helpers
                 .ForMember(dest => dest.Age, opt => opt.MapFrom(src => src.DateOfBirth.GetAge()));
 
             CreateMap<Photo, PhotoDetails>();
-
             CreateMap<UserUpdate, User>();
+            CreateMap<UserRegistrationDto, User>();
 
         }
     }

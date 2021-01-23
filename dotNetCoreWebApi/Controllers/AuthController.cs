@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using dotNetCoreWebApi.Dtos;
 using dotNetCoreWebApi.Models;
 using dotNetCoreWebApi.Repository;
@@ -20,10 +21,12 @@ namespace dotNetCoreWebApi.Controllers
     {
         private readonly IAuthRepository _authRepository;
         private readonly IConfiguration _configuration;
-        public AuthController(IAuthRepository authRepository,IConfiguration configuration)
+        private readonly IMapper _mapper;
+        public AuthController(IAuthRepository authRepository,IConfiguration configuration,IMapper mapper)
         {
             _authRepository = authRepository;
             _configuration = configuration;
+            _mapper = mapper;
         }
 
         [HttpPost("register")]
@@ -41,14 +44,21 @@ namespace dotNetCoreWebApi.Controllers
                 return BadRequest("Username already exists.");
             }
 
-            var user = new User()
-            {
-                Username = userRegistrationDto.Username,
-            };
+            //var user = new User()
+            //{
+            //    //Username = userRegistrationDto.Username,
+                 
+            //};
+            var user = _mapper.Map<User>(userRegistrationDto);
 
             var userCreated = await _authRepository.Register(user, userRegistrationDto.Password);
-            return StatusCode(201);
+
             
+
+            var returnedUser = _mapper.Map<UserForDetails>(userCreated);
+
+            return CreatedAtRoute("GetUser", new {controller = "Users", id = user.Id}, returnedUser);
+
         }
 
         [HttpPost("login")]
