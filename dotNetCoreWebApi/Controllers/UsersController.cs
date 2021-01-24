@@ -5,11 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using AutoMapper;
 using dotNetCoreWebApi.Dtos;
+using dotNetCoreWebApi.Helpers;
 using dotNetCoreWebApi.Repository;
 using Microsoft.AspNetCore.Authorization;
 
 namespace dotNetCoreWebApi.Controllers
-{
+{   
+    [ServiceFilter(typeof(ActivityChecker))]
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
