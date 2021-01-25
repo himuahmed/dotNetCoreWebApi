@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 
 namespace dotNetCoreWebApi.Helpers
 {
@@ -15,6 +16,12 @@ namespace dotNetCoreWebApi.Helpers
             httpResponse.Headers.Add("Access-Control-Allow-Origin", "*");
         }
 
+        public static void Headers(this HttpResponse httpresponse, int totalCount, int totalPage, int currentPage, int itemsPerPage)
+        {
+            var paginationHeaders = new PaginationHeaders(totalCount, totalPage, currentPage, itemsPerPage);
+            httpresponse.Headers.Add("paginationHeaders",JsonConvert.SerializeObject(paginationHeaders));
+            httpresponse.Headers.Add("Access-Control-Expose-Headers", "paginationHeaders");
+        }
         public static int GetAge(this DateTime dateTime)
         {
             var age = DateTime.Today.Year - dateTime.Year;
