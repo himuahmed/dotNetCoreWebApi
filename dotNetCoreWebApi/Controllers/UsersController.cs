@@ -8,6 +8,7 @@ using dotNetCoreWebApi.Dtos;
 using dotNetCoreWebApi.Helpers;
 using dotNetCoreWebApi.Repository;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace dotNetCoreWebApi.Controllers
 {   
@@ -27,10 +28,22 @@ namespace dotNetCoreWebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetUsers()
+        public async Task<IActionResult> GetUsers([FromQuery]UserParams userParams)
         {
-            var users = await _datingRepository.GetUsers();
+            var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var currentUser = await _datingRepository.GetUser(currentUserId);
+            userParams.UserId = currentUserId;
+            if (string.IsNullOrEmpty(userParams.Gender))
+            {
+                userParams.Gender = currentUser.Gender == "male" ? "female" : "male";
+            }
+
+
+            var users = await _datingRepository.GetUsers(userParams);
             var returnedUsers = _mapper.Map<IEnumerable<UserList>>(users);
+            
+            Response.Headers(users.TotalCount,users.TotalPage,users.CurrentPage,users.PageSize); 
+
             return Ok(returnedUsers);
         }
 

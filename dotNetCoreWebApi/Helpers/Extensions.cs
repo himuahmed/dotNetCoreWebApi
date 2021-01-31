@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace dotNetCoreWebApi.Helpers
 {
@@ -19,7 +20,9 @@ namespace dotNetCoreWebApi.Helpers
         public static void Headers(this HttpResponse httpresponse, int totalCount, int totalPage, int currentPage, int itemsPerPage)
         {
             var paginationHeaders = new PaginationHeaders(totalCount, totalPage, currentPage, itemsPerPage);
-            httpresponse.Headers.Add("paginationHeaders",JsonConvert.SerializeObject(paginationHeaders));
+            var camelCaseFormatter = new JsonSerializerSettings();
+            camelCaseFormatter.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            httpresponse.Headers.Add("paginationHeaders",JsonConvert.SerializeObject(paginationHeaders, camelCaseFormatter));
             httpresponse.Headers.Add("Access-Control-Expose-Headers", "paginationHeaders");
         }
         public static int GetAge(this DateTime dateTime)
