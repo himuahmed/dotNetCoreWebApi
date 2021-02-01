@@ -12,5 +12,6 @@ namespace dotNetCoreWebApi.Repository
         Task<User> GetUser(int id);
         Task<PagedList<User>> GetUsers(UserParams userParams);
         Task<bool> SaveAll();
+        Task<Like> GetLike(int userId, int recipientId);
     }
 }

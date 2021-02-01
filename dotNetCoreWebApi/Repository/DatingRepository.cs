@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using dotNetCoreWebApi.Data;
 using dotNetCoreWebApi.Helpers;
@@ -53,13 +54,15 @@ namespace dotNetCoreWebApi.Repository
             return pagedUsers;
         }
 
-
-
         public async Task<bool> SaveAll()
         {
             return await _dataContext.SaveChangesAsync()> 0 ;
         }
 
+        public async Task<Like> GetLike(int userId, int recipientId)
+        {
+            return await _dataContext.Likes.FirstOrDefaultAsync(x => x.LikerId == userId && x.LikeeId == recipientId);
+        }
 
     }
 }

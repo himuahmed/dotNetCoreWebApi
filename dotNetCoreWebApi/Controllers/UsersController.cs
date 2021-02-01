@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using dotNetCoreWebApi.Dtos;
 using dotNetCoreWebApi.Helpers;
+using dotNetCoreWebApi.Models;
 using dotNetCoreWebApi.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -74,6 +75,37 @@ namespace dotNetCoreWebApi.Controllers
             }
 
             throw new Exception("Failed to update user");
+
+        }
+
+        [HttpPost("{userId}/like/{recipient}")]
+        public async Task<IActionResult> LikeUser(int userId, int recipient)
+        {
+            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+            {
+                return Unauthorized();
+            }
+
+            if (await _datingRepository.GetLike(userId, recipient) != null)
+                return BadRequest("You already like this user.");
+
+            if (await _datingRepository.GetUser(recipient) == null)
+            {
+                return BadRequest("User does not exist.");
+            }
+
+            var like = new Like()
+            {
+                LikerId = userId,
+                LikeeId = recipient
+            };
+
+            _datingRepository.Add(like);
+
+            if (await _datingRepository.SaveAll())
+                return Ok();
+
+            return BadRequest("Couldn't like user");
 
         }
     }
