@@ -24,6 +24,7 @@ namespace dotNetCoreWebApi.Helpers
             CreateMap<Photo, PhotoDetails>();
             CreateMap<UserUpdate, User>();
             CreateMap<UserRegistrationDto, User>();
+            CreateMap<MessageDto, Message>().ReverseMap();
 
         }
     }

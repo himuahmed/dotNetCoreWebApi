@@ -64,5 +64,10 @@ namespace dotNetCoreWebApi.Repository
             return await _dataContext.Likes.FirstOrDefaultAsync(x => x.LikerId == userId && x.LikeeId == recipientId);
         }
 
+        public async Task<Message> GetMessage(int id)
+        {
+            return await _dataContext.Messages.FirstOrDefaultAsync(x => x.Id == id);
+        }
+
     }
 }
